@@ -1,8 +1,8 @@
 # VERSION 0.0.1 JEXOU (YOUDOM)
 
 # UPDATE THESE VARIABLES WITH YOUR CONFIG
-JEEDOM_URL = "https://your_url_jeedom/"  # REPLACE WITH THE URL FOR YOUR Jeedom ex "https://dfg.link_jeedom.eu/"
-APIKEY = "pBSbAB7Ytm0Xd3pV9tye5DaCQDFF8pfEiZLKtW3fMjlfe3JYtxMjzi7etJD2nHU"   # REPLACE WITH APIKEY Plugin Alexa-Premium
+JEEDOM_URL = "https://xxxxx.yy.link/"  # REPLACE WITH THE URL FOR YOUR Jeedom
+APIKEY = "pBSX7etJD2tdfghCQDZLKexdfglmJYtxMjzi7V9tye5jd3ptW3fbABlfFY8nHU" # REPLACE WITH alexaPremium apiKey
 
 DEBUG = True  # SET TO TRUE IF YOU WANT TO SEE MORE DETAILS IN THE LOGS
 
@@ -159,7 +159,7 @@ class Jeedom(Borg):
         self.get_ha_state()
 
     def _fetch_token(self):
-        logger.debug("Fetching Jeedom token from Alexa")
+        #logger.debug("Fetching Jeedom token from Alexa")
         return get_account_linking_access_token(self.handler_input)
 
     def _set_ha_error(self, prompt: str):
@@ -182,12 +182,8 @@ class Jeedom(Borg):
         :param path:
         :return:
         """
-        logger.debug("Création url")
-        #logger.debug(f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780")
-        logger.debug(f"{JEEDOM_URL}/" + QUESTION_URL )
+        logger.debug("Création url " + JEEDOM_URL +"/" + QUESTION_URL)
         return f"{JEEDOM_URL}/" + QUESTION_URL
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780"
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "/".join(path)
         
     def _build_url_post(*path: str):
         """
@@ -196,12 +192,8 @@ class Jeedom(Borg):
         :param path:
         :return:
         """
-        logger.debug("Création url POST")
-        #logger.debug(f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780")
-        logger.debug(f"{JEEDOM_URL}/" + REPONSE_URL )
+        logger.debug("Création url POST : " + JEEDOM_URL +"/" + REPONSE_URL)
         return f"{JEEDOM_URL}/" + REPONSE_URL
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780"
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "/".join(path)
 
     def _get_headers(self):
         """
@@ -247,8 +239,6 @@ class Jeedom(Borg):
         url = self._build_url(*path)
         response = self.http.request("GET", url, headers=headers)
 
-        #logger.debug(f"Raw response: {response.data}")
-        #logger.debug(f"Raw response (status): {response.status}")
         errors: Union[bool, str] = self._check_response_errors(response)
         #logger.debug(errors)
         if errors:
@@ -293,19 +283,7 @@ class Jeedom(Borg):
         :param response:
         :return: Json object or None
         """
-        #logger.debug("response.data.decode utf8")
-        #logger.debug(response.data.decode("utf-8"))
-        #tempo=response.data.decode("utf-8")
-        #tempo=tempo.replace("'", '"')
-        #tempo=json.loads(tempo)
-        #logger.debug("tempo get state")
-        #logger.debug(tempo.get("state"))
-        #logger.debug("json.loads utf8")
-        #logger.debug(json.loads(response.data.decode("utf-8")))
-        #logger.debug("json.loads utf8 avec replace !!!")
-        #logger.debug(json.loads(response.data.decode("utf-8").replace("'", '"')))#.get("state")
         
-
         decoded_response: Union[str, bytes] = json.loads(response.data.decode("utf-8")).get("state")
         logger.debug(f"Decoded response: {decoded_response}")
 
@@ -656,7 +634,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
         """Simulate an intent."""
         logger.info("Reflector Intent triggered")
         intent_name = get_intent_name(handler_input)
-        speak_output = "You just triggered " + intent_name + "."
+        speak_output = "Vous avez lancé " + intent_name + "."
 
         return handler_input.response_builder.speak(speak_output).response
 
