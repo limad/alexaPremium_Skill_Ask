@@ -96,6 +96,11 @@
             "a {Times}",
             "{Dates}"
           ]
+        },
+        {
+          "slots": [],
+          "name": "GetVolumeIntent",
+          "samples": []
         }
       ],
       "types": [

@@ -1,4 +1,4 @@
-# VERSION 0.0.1 JEXOU (YOUDOM)
+# VERSION 0.2 Limad44
 
 # UPDATE THESE VARIABLES WITH YOUR CONFIG
 JEEDOM_URL = "https://your_url_jeedom/"  # REPLACE WITH THE URL FOR YOUR Jeedom ex "https://dfg.link_jeedom.eu/"
@@ -6,19 +6,17 @@ APIKEY = "pBSbAB7Ytm0Xd3pV9tye5DaCQDFF8pfEiZLKtW3fMjlfe3JYtxMjzi7etJD2nHU"   # R
 
 DEBUG = True  # SET TO TRUE IF YOU WANT TO SEE MORE DETAILS IN THE LOGS
 
-
 # DO NOT MODIFY NOW
 VERIFY_SSL = True  # SET TO FALSE IF YOU DO NOT HAVE VALID CERTS
 TOKEN = ""  # ADD YOUR LONG LIVED TOKEN IF NEEDED OTHERWISE LEAVE BLANK
-#QUESTION_URL = "plugins/alexaapiv2/data/alexaAsk.txt"
-QUESTION_URL = "plugins/alexaapiv2/php/askQuestion.php?apikey="+APIKEY"
+QUESTION_URL = "plugins/alexaapiv2/core/php/askQuestion.php?apikey="+APIKEY
 REPONSE_URL = "plugins/alexaapiv2/core/php/alexa_push.php?apikey="+APIKEY+"&command=reponseASK"
 
 
 # SET TO FALSE IF YOU DO NOT WANT TO SHARE CRASH REPORTS AND SKILL PERFORMANCE DATA WITH US.
 # We really appreciate if you keep this True as we use this to help us identify bugs and fix them.
 # Check sentry.io to see what information is collected
-ALLOW_ANONYMOUS_DATA_COLLECTION = True 
+ALLOW_ANONYMOUS_DATA_COLLECTION = False 
 
 """ NO NEED TO EDIT ANYTHING UNDER THE LINE """
 # Built-In Imports
@@ -160,7 +158,7 @@ class Jeedom(Borg):
         self.get_ha_state()
 
     def _fetch_token(self):
-        logger.debug("Fetching Jeedom token from Alexa")
+        #logger.debug("Fetching Jeedom token from Alexa")
         return get_account_linking_access_token(self.handler_input)
 
     def _set_ha_error(self, prompt: str):
@@ -183,12 +181,8 @@ class Jeedom(Borg):
         :param path:
         :return:
         """
-        logger.debug("Création url")
-        #logger.debug(f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780")
-        logger.debug(f"{JEEDOM_URL}/" + QUESTION_URL )
+        logger.debug("Création url " + JEEDOM_URL +"/" + QUESTION_URL)
         return f"{JEEDOM_URL}/" + QUESTION_URL
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780"
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "/".join(path)
         
     def _build_url_post(*path: str):
         """
@@ -197,12 +191,8 @@ class Jeedom(Borg):
         :param path:
         :return:
         """
-        logger.debug("Création url POST")
-        #logger.debug(f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780")
-        logger.debug(f"{JEEDOM_URL}/" + REPONSE_URL )
+        logger.debug("Création url POST : " + JEEDOM_URL +"/" + REPONSE_URL)
         return f"{JEEDOM_URL}/" + REPONSE_URL
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "&type=cmd&id=7780"
-        #return f"{JEEDOM_URL}/" + API + APIKEY + "/".join(path)
 
     def _get_headers(self):
         """
@@ -248,8 +238,6 @@ class Jeedom(Borg):
         url = self._build_url(*path)
         response = self.http.request("GET", url, headers=headers)
 
-        #logger.debug(f"Raw response: {response.data}")
-        #logger.debug(f"Raw response (status): {response.status}")
         errors: Union[bool, str] = self._check_response_errors(response)
         #logger.debug(errors)
         if errors:
@@ -294,19 +282,7 @@ class Jeedom(Borg):
         :param response:
         :return: Json object or None
         """
-        #logger.debug("response.data.decode utf8")
-        #logger.debug(response.data.decode("utf-8"))
-        #tempo=response.data.decode("utf-8")
-        #tempo=tempo.replace("'", '"')
-        #tempo=json.loads(tempo)
-        #logger.debug("tempo get state")
-        #logger.debug(tempo.get("state"))
-        #logger.debug("json.loads utf8")
-        #logger.debug(json.loads(response.data.decode("utf-8")))
-        #logger.debug("json.loads utf8 avec replace !!!")
-        #logger.debug(json.loads(response.data.decode("utf-8").replace("'", '"')))#.get("state")
         
-
         decoded_response: Union[str, bytes] = json.loads(response.data.decode("utf-8")).get("state")
         logger.debug(f"Decoded response: {decoded_response}")
 
@@ -657,7 +633,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
         """Simulate an intent."""
         logger.info("Reflector Intent triggered")
         intent_name = get_intent_name(handler_input)
-        speak_output = "You just triggered " + intent_name + "."
+        speak_output = "Vous avez lancé " + intent_name + "."
 
         return handler_input.response_builder.speak(speak_output).response
 

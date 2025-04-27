@@ -3,24 +3,24 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:eu-west-1:571600828883:function:f51560d0-6edd-4283-ad21-e9f0690b62d1:Release_0"
+          "uri": "arn:aws:lambda:eu-west-1:571600828883:function:03e7715a-1b10-4f31-b0b2-6f78e373c13a:Release_0"
         },
         "interfaces": [],
         "locales": {},
         "regions": {
           "EU": {
             "endpoint": {
-              "uri": "arn:aws:lambda:eu-west-1:571600828883:function:f51560d0-6edd-4283-ad21-e9f0690b62d1:Release_0"
+              "uri": "arn:aws:lambda:eu-west-1:571600828883:function:03e7715a-1b10-4f31-b0b2-6f78e373c13a:Release_0"
             }
           },
           "NA": {
             "endpoint": {
-              "uri": "arn:aws:lambda:us-east-1:571600828883:function:f51560d0-6edd-4283-ad21-e9f0690b62d1:Release_0"
+              "uri": "arn:aws:lambda:us-east-1:571600828883:function:03e7715a-1b10-4f31-b0b2-6f78e373c13a:Release_0"
             }
           },
           "FE": {
             "endpoint": {
-              "uri": "arn:aws:lambda:us-west-2:571600828883:function:f51560d0-6edd-4283-ad21-e9f0690b62d1:Release_0"
+              "uri": "arn:aws:lambda:us-west-2:571600828883:function:03e7715a-1b10-4f31-b0b2-6f78e373c13a:Release_0"
             }
           }
         }
@@ -35,14 +35,31 @@
           }
         ]
       },
+      "category": "KNOWLEDGE_AND_TRIVIA",
       "distributionCountries": [],
       "isAvailableWorldwide": true,
       "locales": {
         "fr-FR": {
-          "name": "Jee_Lamda"
+          "description": "Sample Full Description",
+          "examplePhrases": [
+            "Alexa ouvre le génie des salutations",
+            "bonjour",
+            "aide"
+          ],
+          "keywords": [],
+          "name": "AlexaPremium",
+          "summary": "Sample Short Description"
         },
         "fr-CA": {
-          "name": "Jee_Lamda"
+          "description": "Sample Full Description",
+          "examplePhrases": [
+            "Alexa ouvre le génie des salutations",
+            "bonjour",
+            "aide"
+          ],
+          "keywords": [],
+          "name": "AlexaPremium",
+          "summary": "Sample Short Description"
         }
       },
       "testingInstructions": "Sample Testing Instructions."
