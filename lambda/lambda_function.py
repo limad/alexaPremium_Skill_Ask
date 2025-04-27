@@ -10,7 +10,8 @@ DEBUG = True  # SET TO TRUE IF YOU WANT TO SEE MORE DETAILS IN THE LOGS
 # DO NOT MODIFY NOW
 VERIFY_SSL = True  # SET TO FALSE IF YOU DO NOT HAVE VALID CERTS
 TOKEN = ""  # ADD YOUR LONG LIVED TOKEN IF NEEDED OTHERWISE LEAVE BLANK
-QUESTION_URL = "plugins/alexaapiv2/data/alexaAsk.txt"
+#QUESTION_URL = "plugins/alexaapiv2/data/alexaAsk.txt"
+QUESTION_URL = "plugins/alexaapiv2/php/askQuestion.php?apikey="+APIKEY"
 REPONSE_URL = "plugins/alexaapiv2/core/php/alexa_push.php?apikey="+APIKEY+"&command=reponseASK"
 
 
