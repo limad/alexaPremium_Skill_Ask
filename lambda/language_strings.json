@@ -37,7 +37,11 @@
     "OKAY": "Okay",
     "STRING": "Vous avez choisi {}",
     "SELECTED": "Vous avez choisi {}",
-    "SKILL_NAME": "Jeedom Skill Ask",
+<<<<<<< HEAD
+    "SKILL_NAME": "Jeedom custom actions",
+=======
+    "SKILL_NAME": "Jeedom custom actions",
+>>>>>>> 070bd8eea390592ee902d9e26081d24298b23957
     "STOP_MESSAGE": "Au revoir!",
     "WELCOME_MESSAGE": "Bienvenue sur {}. Le champ texte est: {}"
   },

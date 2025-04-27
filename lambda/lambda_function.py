@@ -1,8 +1,8 @@
 # VERSION 0.2 Limad44
 
 # UPDATE THESE VARIABLES WITH YOUR CONFIG
-JEEDOM_URL = "https://your_url_jeedom/"  # REPLACE WITH THE URL FOR YOUR Jeedom ex "https://dfg.link_jeedom.eu/"
-APIKEY = "pBSbAB7Ytm0Xd3pV9tye5DaCQDFF8pfEiZLKtW3fMjlfe3JYtxMjzi7etJD2nHU"   # REPLACE WITH APIKEY Plugin Alexa-Premium
+JEEDOM_URL = "https://xxxxx.yy.link/"  # REPLACE WITH THE URL FOR YOUR Jeedom
+APIKEY = "pBSX7etJD2tdfghCQDZLKexdfglmJYtxMjzi7V9tye5jd3ptW3fbABlfFY8nHU" # REPLACE WITH alexaPremium apiKey
 
 DEBUG = True  # SET TO TRUE IF YOU WANT TO SEE MORE DETAILS IN THE LOGS
 
