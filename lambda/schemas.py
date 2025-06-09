@@ -15,14 +15,15 @@ from pydantic import BaseModel, Field
 # Local Imports
 
 
-class HaStateError(BaseModel):
+class JeeStateError(BaseModel):
     _error: bool = Field(default=True, alias="error", title="error")
     text: str
 
 
-class HaState(BaseModel):
+class JeeState(BaseModel):
     _error: bool = Field(default=False, alias="error", title="error")
     event_id: Optional[str]
     deviceSerialNumber: Optional[str]
     suppress_confirmation: bool = Field(default=False)
     text: str
+    textBrut: str

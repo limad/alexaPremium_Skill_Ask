@@ -21,6 +21,7 @@
         {
           "name": "AMAZON.YesIntent",
           "samples": [
+            "ok",
             "oui",
             "ouais"
           ]
@@ -34,13 +35,17 @@
         {
           "slots": [
             {
-              "name": "Strings",
+              "name": "Person",
               "type": "AMAZON.Person"
+            },
+            {
+              "name": "Selection",
+              "type": "Selections"
             }
           ],
           "name": "String",
           "samples": [
-            "{Strings}"
+            "{Person}"
           ]
         },
         {
@@ -134,7 +139,7 @@
           "name": "Selections"
         }
       ],
-      "invocationName": "pose question"
+      "invocationName": "question ask"
     }
   }
 }
