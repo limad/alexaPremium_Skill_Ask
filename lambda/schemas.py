@@ -26,4 +26,3 @@ class JeeState(BaseModel):
     deviceSerialNumber: Optional[str]
     suppress_confirmation: bool = Field(default=False)
     text: str
-    textBrut: str
