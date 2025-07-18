@@ -1,6 +1,6 @@
-# VERSION 0.2 Limad44
+# VERSION 0.3 Limad44
 
-CODE_VERS = 0.2
+CODE_VERS = 0.3
 JEEDOM_URL = "https://xxxxxxxxxxxx.xx/"
 APIKEY = ""
 
@@ -31,7 +31,6 @@ from urllib3 import HTTPResponse
 
 import prompts
 from schemas import JeeState, JeeStateError
-from utils import get_logger
 from const import (
     INPUT_TEXT_ENTITY,
     RESPONSE_YES,
@@ -45,7 +44,8 @@ from const import (
 )
 
 JEEDOM_URL = JEEDOM_URL.rstrip("/")
-logger = get_logger(DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG if DEBUG else logging.INFO)
 
 def _handle_response(handler, speak_out: Optional[str]):
     """
@@ -105,7 +105,9 @@ class Jeedom(Borg):
             self.handler_input = handler_input
             self.language_strings = handler_input.attributes_manager.request_attributes["_"]
             self.token = self._fetch_token() if not TOKEN else TOKEN
-            logger.debug(self.token)
+            logger.debug(f"init::token: {self.token}" )
+            
+            
             self.get_jee_question()
 
     def _fetch_token(self):
@@ -121,6 +123,7 @@ class Jeedom(Borg):
         :param prompt: Value obtained from prompts file
         :return:
         """
+        logger.debug(f"_set_jee_error:: {prompt}")
         self.jee_state = JeeStateError(text=self.language_strings[prompt])
 
     @staticmethod
@@ -131,7 +134,7 @@ class Jeedom(Borg):
         :param path:
         :return:
         """
-        logger.debug(f"Création url {JEEDOM_URL}/{QUESTION_URL}")
+        logger.debug(f"Création QUESTION-URL {JEEDOM_URL}/{QUESTION_URL}")
         return f"{JEEDOM_URL}/{QUESTION_URL}"
 
     @staticmethod
@@ -157,16 +160,20 @@ class Jeedom(Borg):
     def _check_response_errors(self, response: HTTPResponse) -> Union[bool, str]:
         if response.status == 401:
             logger.error("401 Error from Jeedom.")
-            logger.debug(response.data)
+            logger.debug(f"data: {response.data}" )
             return f"Error 401 {self.language_strings[prompts.ERROR_401]}"
         if response.status == 404:
             logger.error("404 Error from Jeedom.")
-            logger.debug(response.data)
+            logger.debug(f"data: {response.data}" )
             return f"Error 404 {self.language_strings[prompts.ERROR_404]}"
         if response.status >= 400:
             logger.error(f"{response.status} Error from Jeedom.")
-            logger.debug(response.data)
+            logger.debug(f"data: {response.data}" )
             return f"Error {response.status}, {self.language_strings[prompts.ERROR_400]}"
+        if response.status != 200:
+            logger.error(f"code {response.status} Error from Jeedom.")
+            logger.debug(f"data: {response.data}" )
+            return f"Error {response.status}, Error {response.status}"
         return False
 
     def _get(self, *path: str, extra_headers: Optional[dict] = None):
@@ -178,15 +185,18 @@ class Jeedom(Borg):
         :param params:
         :return:
         """
+        logger.debug(f"_get:: {path}" )
         headers = self._get_headers()
         if extra_headers:
             headers.update(extra_headers)
         url = self._build_url(*path)
         response = self.http.request("GET", url, headers=headers)
+        logger.debug(f"_get::response: {response}" )
+            
         errors = self._check_response_errors(response)
         if errors:
             self.jee_state = JeeStateError(text=errors)
-            logger.debug(self.jee_state)
+            logger.debug(f"_get::jee_state: {self.jee_state}" )
             return None
         return response
 
@@ -199,16 +209,18 @@ class Jeedom(Borg):
         :param params:
         :return:
         """
+        logger.debug(f"_post: {path}" )
         headers = self._get_headers()
         if extra_headers:
             headers.update(extra_headers)
         url = self._build_url_post(*path)
-        logger.debug(json.dumps(body))
+        logger.debug(f"_post::body: {json.dumps(body)}" )
+            
         response = self.http.request("POST", url, headers=headers, body=json.dumps(body).encode("utf-8"))
         errors = self._check_response_errors(response)
         if errors:
             self.jee_state = JeeStateError(text=errors)
-            logger.debug(self.jee_state)
+            logger.debug(f"post::jee_state: {self.jee_state}" )
             return None
         return response
 
@@ -226,7 +238,7 @@ class Jeedom(Borg):
             return json.loads(decoded_response)
         logger.error("No entity state provided by Jeedom.")
         self._set_jee_error(prompts.ERROR_CONFIG)
-        logger.debug(self.jee_state)
+        logger.debug(f"_decode_response::jee_state: {self.jee_state}" )
         return
 
     def clear_state(self):
@@ -238,16 +250,18 @@ class Jeedom(Borg):
 
     def get_jee_question(self):
         """
-        Updates the local HA state with the servers state
+        Updates the local Jeedom state with the servers state
 
         Used for getting the text to speak, event_id as well as other passable variables
         """
-        logger.debug(f"INPUT_TEXT_ENTITY: {INPUT_TEXT_ENTITY}")
+        logger.debug(f"get_jee_question:: INPUT_TEXT_ENTITY: {INPUT_TEXT_ENTITY}")
         response = self._get("api", "states", INPUT_TEXT_ENTITY)
         if not response:
+            logger.debug(f"get_jee_question:: No response 1")
             return
         response = self._decode_response(response)
         if not response:
+            logger.debug(f"get_jee_question:: No response 2")
             return
         self.jee_state = JeeState(
             event_id=response.get("event"),
@@ -256,8 +270,8 @@ class Jeedom(Borg):
             deviceSerialNumber=response.get("deviceSerialNumber"),
             textBrut=response.get("textBrut"),
         )
-        logger.debug(self.jee_state)
-
+        logger.debug(f"get_jee_question::jee_state: {self.jee_state}" )
+            
     def post_to_jeedom(self, response: str, response_type: str, **kwargs) -> Optional[str]:
         """
         Posts an event to the Jeedom server.
@@ -267,6 +281,7 @@ class Jeedom(Borg):
         :param kwargs: Additional parameters to send to the Jeedom server.
         :return: The text to speak to the user.
         """
+        logger.debug("post_to_jeedom start")
         body = {
             "event_id": self.jee_state.event_id,
             "event_response": response,
