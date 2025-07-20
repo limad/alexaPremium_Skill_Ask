@@ -232,7 +232,8 @@ class JeeAsk(Borg):
             headers = headers.update(extra_headers)
 
         url = self._build_url(*path)
-        logger.debug(f"_post::url:: {url}")
+        logger.debug(f"_post::url: {url}")
+        logger.debug(f"_post::body: {json.dumps(body)}")
         response = self.http.request("POST", url, headers=headers, body=json.dumps(body).encode("utf-8"))
 
         errors: Union[bool, str] = self._check_response_errors(response)
@@ -240,7 +241,7 @@ class JeeAsk(Borg):
             self.jee_state = QuestionStateError(text=errors)
             logger.debug(f"_post::jee_state => {self.jee_state}")
             return None
-
+        logger.debug(f"_post::response: {response.status}")
         return response
 
     def _decode_response(self, response) -> Optional[dict]:
@@ -268,7 +269,7 @@ class JeeAsk(Borg):
         Clear the state of the local Jeedom object.
         """
 
-        logger.debug("Clearing Jeedom local state")
+        logger.debug("clear_state:: Clearing Jeedom local state")
         self.jee_state = None
 
     def get_jeeQuestion(self):
