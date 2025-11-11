@@ -21,7 +21,6 @@
         {
           "name": "AMAZON.YesIntent",
           "samples": [
-            "ok",
             "oui",
             "ouais"
           ]
@@ -35,17 +34,13 @@
         {
           "slots": [
             {
-              "name": "Person",
+              "name": "Strings",
               "type": "AMAZON.Person"
-            },
-            {
-              "name": "Selection",
-              "type": "Selections"
             }
           ],
           "name": "String",
           "samples": [
-            "{Person}"
+            "{Strings}"
           ]
         },
         {
@@ -101,11 +96,6 @@
             "a {Times}",
             "{Dates}"
           ]
-        },
-        {
-          "slots": [],
-          "name": "GetVolumeIntent",
-          "samples": []
         }
       ],
       "types": [
@@ -139,7 +129,7 @@
           "name": "Selections"
         }
       ],
-      "invocationName": "question ask"
+      "invocationName": "jee question"
     }
   }
 }
